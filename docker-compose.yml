@@ -1,0 +1,52 @@
+version: '2'
+services:
+  service:
+    build: .
+    cap_add:
+      - ALL
+    # links:
+    #   - kafka
+    ports:
+      - 9001 # supervisord XML-RPC
+      - 50510
+      - 50511
+      - 50513
+    volumes:
+      - ./docker/sgs/etc/supervisord.conf:/etc/supervisord.conf:delegated
+      - .:/opt/go/src/github.com/sendgrid/sgs:delegated
+    working_dir: /opt/go/src/github.com/sendgrid/sgs
+
+  kafka:
+    cap_add:
+      - ALL
+    hostname: kafka
+    # Use kafka 0.11 because the image support compacted topics
+    image: wurstmeister/kafka:0.11.0.0
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: "kafka"
+      KAFKA_ADVERTISED_PORT: "9092"
+      KAFKA_BROKER_ID: "0"
+      KAFKA_CREATE_TOPICS: "transactions:2:1"
+      KAFKA_DEFAULT_REPLICATION_FACTOR: "1"
+      KAFKA_LOG_CLEANER_BACKOFF_MS: "30000"
+      KAFKA_LOG_CLEANER_DELETE_RETENTION_MS: "60000"
+      KAFKA_LOG_RETENTION_HOURS: "1"
+      KAFKA_LOG_ROLL_MS: "60000"
+      KAFKA_NUM_PARTITIONS: "1"
+      KAFKA_ZOOKEEPER_CONNECT: zk
+      KAFKA_ZOOKEEPER_CONNECTION_TIMEOUT_MS: "30000"
+      KAFKA_ZOOKEEPER_SESSION_TIMEOUT_MS: "250"
+    ports:
+      - 9092
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    links:
+      - zk
+
+  # service must be name "zk" for kafka container to auto-discover the zookeeper
+  # nodes
+  zk:
+    hostname: zk
+    image: wurstmeister/zookeeper
+    ports:
+      - 2181

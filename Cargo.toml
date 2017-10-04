@@ -1,0 +1,23 @@
+[package]
+name = "grpctest"
+version = "0.1.0"
+authors = ["Kane <kane@sendgrid.com>"]
+
+[lib]
+name = "grpctest"
+
+[dependencies]
+grpcio = "0.1.1"
+futures = "0.1.16"
+protobuf = "1.4.1"
+clap = "^2.26.2"
+tokio-core = "^0.1.9"
+env_logger = "^0.4.3"
+log = "^0.3.8"
+chrono = "^0.4.0"
+futures-await = { git = 'https://github.com/alexcrichton/futures-await' }
+tokio-io = "*"
+
+[dependencies.rdkafka]
+git = "https://github.com/fede1024/rust-rdkafka.git"
+
