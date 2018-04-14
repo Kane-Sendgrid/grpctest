@@ -12,9 +12,6 @@ services:
       - 50510
       - 50511
       - 50513
-    volumes:
-      - ./docker/sgs/etc/supervisord.conf:/etc/supervisord.conf:delegated
-      - .:/opt/go/src/github.com/sendgrid/sgs:delegated
     working_dir: /opt/go/src/github.com/sendgrid/sgs
 
   kafka:
