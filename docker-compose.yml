@@ -9,10 +9,6 @@ services:
     #   - kafka
     ports:
       - 9001 # supervisord XML-RPC
-      - 50510
-      - 50511
-      - 50513
-    working_dir: /opt/go/src/github.com/sendgrid/sgs
 
   kafka:
     cap_add:
